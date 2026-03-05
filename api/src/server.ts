@@ -13,6 +13,8 @@ import rateLimit from 'express-rate-limit';
 import winston from 'winston';
 import { healthRouter } from './routes/health.routes';
 import { authRouter } from './routes/auth.routes';
+import { uploadRouter } from './routes/upload.routes';
+import { seasonsRouter } from './routes/seasons.routes';
 
 const logger = winston.createLogger({
   level: 'info',
@@ -66,6 +68,8 @@ app.use(rateLimit({
 
 app.use(healthRouter);
 app.use(authRouter);
+app.use('/v1/clients', uploadRouter);
+app.use(seasonsRouter);
 
 const PORT = process.env.PORT || 3000;
 

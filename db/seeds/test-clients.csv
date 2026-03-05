@@ -1,0 +1,21 @@
+client_name,service_address,city,state,zip,acres,client_type,service_frequency,client_status,annual_revenue,prior_route
+Smith Residence,1420 Maple Ave,Naperville,IL,60540,0.28,residential,weekly,confirmed,1800.00,Route A
+Johnson Property,875 Oak Street,Naperville,IL,60565,0.35,residential,biweekly,confirmed,1200.00,Route B
+Williams Home,2301 Washington St,Naperville,IL,60563,0.22,residential,weekly,confirmed,1500.00,
+Davis Lawn Care,910 Jefferson Ave,Naperville,IL,60540,0.41,residential,weekly,pending,2100.00,Route C
+Martinez Family,3145 Naper Blvd,Naperville,IL,60564,0.19,residential,biweekly,confirmed,900.00,
+Anderson Estate,1680 Ogden Ave,Naperville,IL,60563,0.48,residential,weekly,confirmed,2800.00,Route A
+Taylor House,425 Aurora Ave,Naperville,IL,60540,0.31,residential,weekly,new,,
+Thomas Residence,2750 Rickert Dr,Naperville,IL,60565,0.26,residential,weekly,confirmed,1600.00,
+Wilson Property,1100 S Mill St,Naperville,IL,60540,0.33,residential,weekly,confirmed,1900.00,Route B
+Garcia Home,880 Royal St George Dr,Naperville,IL,60563,0.17,residential,biweekly,confirmed,850.00,
+Brown Residence,567 Bauer Rd,Naperville,IL,60564,0.39,residential,weekly,confirmed,2200.00,
+Lee Property,2020 Hobson Rd,Naperville,IL,60564,0.24,residential,weekly,pending,1400.00,Route C
+Clark Family,445 W 5th Ave,Naperville,IL,60563,0.30,residential,weekly,confirmed,1750.00,
+Robinson House,1290 Iroquois Ave,Naperville,IL,60563,0.15,residential,weekly,confirmed,1050.00,
+Hall Residence,3300 Book Rd,Naperville,IL,60564,0.45,residential,weekly,confirmed,2600.00,
+Aurora HOA,500 Corporate Dr,Aurora,IL,60505,2.50,commercial,weekly,confirmed,8500.00,
+Midwest Office Park,1200 N Farnsworth Ave,Aurora,IL,60505,3.75,commercial,weekly,confirmed,12000.00,
+Zero Acres Property,750 Waubonsee Dr,Aurora,IL,60506,0,residential,weekly,new,,
+Bigcorp Campus,888 Prairie St,Naperville,IL,60540,1.20,corporate,weekly,confirmed,5000.00,
+Smith Residence,1420 Maple Ave,Naperville,IL,60540,0.28,residential,weekly,confirmed,1800.00,Route A
