@@ -1,0 +1,78 @@
+# docker-compose.yml
+# Docker Compose configuration for Canopy Routes (local development)
+# Last modified: 2026-03-04
+
+services:
+  # ──────────────────────────────────────────────────────────────
+  # PostgreSQL 16 database container
+  # Stores all application data. Uses Alpine image for small footprint.
+  # Port 5433 mapped to avoid conflicts with any local Postgres instance.
+  # ──────────────────────────────────────────────────────────────
+  canopy-routes-db:
+    image: postgres:16-alpine
+    container_name: canopy-routes-db
+    environment:
+      POSTGRES_DB: canopy_routes
+      POSTGRES_USER: canopy
+      POSTGRES_PASSWORD: canopy_dev
+    volumes:
+      - canopy-routes-db-data:/var/lib/postgresql/data
+    ports:
+      - "5433:5432" # Local dev only — do NOT expose in production
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U canopy -d canopy_routes"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - canopy-routes-net
+
+  # ──────────────────────────────────────────────────────────────
+  # Node.js Express API container
+  # Runs the TypeScript backend with nodemon for hot-reload in dev.
+  # All environment variables loaded from ./api/.env via env_file.
+  # ──────────────────────────────────────────────────────────────
+  canopy-routes-api:
+    image: node:20-alpine
+    container_name: canopy-routes-api
+    working_dir: /app
+    volumes:
+      - ./api:/app
+      - /app/node_modules
+    command: sh -c "npm install && npm run dev"
+    depends_on:
+      canopy-routes-db:
+        condition: service_healthy
+    ports:
+      - "3000:3000" # Local dev only — do NOT expose in production
+    env_file:
+      - ./api/.env
+    networks:
+      - canopy-routes-net
+
+  # ──────────────────────────────────────────────────────────────
+  # React frontend container
+  # Runs Vite dev server with hot-reload. In production, this will
+  # be replaced with an nginx container serving the built static files.
+  # ──────────────────────────────────────────────────────────────
+  canopy-routes-web:
+    image: node:20-alpine
+    container_name: canopy-routes-web
+    working_dir: /app
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    command: sh -c "npm install && npm run dev -- --host 0.0.0.0"
+    depends_on:
+      - canopy-routes-api
+    ports:
+      - "5173:5173"
+    networks:
+      - canopy-routes-net
+
+volumes:
+  canopy-routes-db-data:
+
+networks:
+  canopy-routes-net:
+    driver: bridge
