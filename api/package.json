@@ -7,6 +7,9 @@
     "build": "tsc",
     "start": "node dist/server.js",
     "test": "node --require ts-node/register --test src/services/zone.service.test.ts",
+    "test:zone": "node --require ts-node/register --test src/services/zone.service.test.ts",
+    "test:auth": "node --require ts-node/register --test src/tests/auth.integration.test.ts",
+    "test:all": "node --require ts-node/register --test src/services/zone.service.test.ts src/tests/auth.integration.test.ts",
     "test:watch": "node --require ts-node/register --test --watch src/services/zone.service.test.ts",
     "lint": "eslint src --ext .ts",
     "migrate": "node -e \"require('ts-node').register({transpileOnly:true,skipProject:true,compilerOptions:{module:'CommonJS',target:'ES2022',esModuleInterop:true}});require('../db/migrate.ts');\""

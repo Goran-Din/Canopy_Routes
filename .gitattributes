@@ -1,0 +1,6 @@
+# .gitattributes
+# Force LF line endings in the repository.
+# On Windows checkout, Git converts to CRLF automatically.
+# This eliminates "LF will be replaced by CRLF" warnings.
+
+* text=auto eol=lf

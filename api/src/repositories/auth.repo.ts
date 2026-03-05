@@ -54,13 +54,34 @@ export async function findActiveUserById(
   return result.rows[0] || null;
 }
 
+export interface SafeUserRecord {
+  id: string;
+  tenant_id: string;
+  email: string;
+  display_name: string;
+  role: string;
+  is_active: boolean;
+}
+
+export async function findUserById(
+  userId: string
+): Promise<SafeUserRecord | null> {
+  const result = await pool.query<SafeUserRecord>(
+    `SELECT id, tenant_id, email, display_name, role, is_active
+     FROM users
+     WHERE id = $1`,
+    [userId]
+  );
+  return result.rows[0] || null;
+}
+
 export async function updateFailedLoginAttempts(
   userId: string,
   attempts: number,
   lockedUntil: Date | null
 ): Promise<void> {
   await pool.query(
-    `UPDATE users SET failed_login_attempts = $1, locked_until = $2 WHERE id = $3`,
+    `UPDATE users SET failed_login_attempts = $1, locked_until = $2, updated_at = NOW() WHERE id = $3`,
     [attempts, lockedUntil, userId]
   );
 }
@@ -74,7 +95,7 @@ export async function updateLastLogin(userId: string): Promise<void> {
 
 export async function resetFailedAttempts(userId: string): Promise<void> {
   await pool.query(
-    `UPDATE users SET failed_login_attempts = 0, locked_until = NULL WHERE id = $1`,
+    `UPDATE users SET failed_login_attempts = 0, locked_until = NULL, updated_at = NOW() WHERE id = $1`,
     [userId]
   );
 }
