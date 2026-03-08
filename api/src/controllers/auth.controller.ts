@@ -39,6 +39,7 @@ export async function loginHandler(req: Request, res: Response): Promise<void> {
       success: true,
       data: {
         accessToken: result.accessToken,
+        mustChangePassword: result.mustChangePassword,
         user: result.user,
       },
     });

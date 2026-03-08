@@ -5,6 +5,7 @@
 import { Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import { JwtPayload, AuthenticatedRequest } from '../types/auth.types';
+import { pool } from '../db/pool';
 
 const publicKey = (process.env.JWT_PUBLIC_KEY || '').replace(/\\n/g, '\n');
 
@@ -23,8 +24,27 @@ export function authenticateToken(
 
   try {
     const decoded = jwt.verify(token, publicKey, { algorithms: ['RS256'] }) as JwtPayload;
+
+    // Reject super_admin tokens on tenant endpoints
+    if ((decoded as any).role === 'super_admin') {
+      res.status(403).json({ success: false, error: 'Use tenant credentials for this endpoint' });
+      return;
+    }
+
     req.user = decoded;
-    next();
+
+    // Check tenant is not suspended
+    pool.query('SELECT status FROM tenants WHERE id = $1', [decoded.tenantId])
+      .then(result => {
+        if (result.rows[0]?.status === 'suspended') {
+          res.status(403).json({ success: false, error: 'Account suspended. Contact support.' });
+          return;
+        }
+        next();
+      })
+      .catch(() => {
+        next();
+      });
   } catch {
     res.status(401).json({ success: false, error: 'Unauthorized', code: 'INVALID_TOKEN' });
   }
@@ -38,5 +58,28 @@ export function requireRole(...roles: string[]) {
       return;
     }
     next();
+  };
+}
+
+export function requireSuperAdmin() {
+  return (req: any, res: any, next: any) => {
+    const authHeader = req.headers.authorization;
+    if (!authHeader?.startsWith('Bearer ')) {
+      return res.status(401).json({ success: false, error: 'No token provided' });
+    }
+    const token = authHeader.slice(7);
+    try {
+      const key = (process.env.JWT_PUBLIC_KEY || '').replace(/\\n/g, '\n');
+      if (!key) return res.status(500).json({ success: false, error: 'JWT not configured' });
+      const payload = jwt.verify(token, key, { algorithms: ['RS256'] }) as any;
+      if (payload.role !== 'super_admin') {
+        return res.status(403).json({ success: false, error: 'Super-admin access required' });
+      }
+      req.adminId = payload.adminId;
+      req.adminEmail = payload.email;
+      next();
+    } catch {
+      return res.status(401).json({ success: false, error: 'Invalid token' });
+    }
   };
 }

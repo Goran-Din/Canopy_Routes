@@ -86,6 +86,7 @@ export async function login(email: string, password: string, tenantSlug: string,
   return {
     accessToken,
     refreshToken,
+    mustChangePassword: (user as any).must_change_password === true,
     user: {
       id: user.id,
       email: user.email,

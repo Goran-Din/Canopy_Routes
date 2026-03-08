@@ -23,7 +23,8 @@ export async function findUserByEmail(
 ): Promise<UserRecord | null> {
   const result = await pool.query<UserRecord>(
     `SELECT id, tenant_id, email, password_hash, role, display_name,
-            is_active, failed_login_attempts, locked_until, last_login_at
+            is_active, failed_login_attempts, locked_until, last_login_at,
+            must_change_password
      FROM users
      WHERE tenant_id = $1 AND email = $2 AND is_active = TRUE`,
     [tenantId, email]
@@ -46,7 +47,8 @@ export async function findActiveUserById(
 ): Promise<UserRecord | null> {
   const result = await pool.query<UserRecord>(
     `SELECT id, tenant_id, email, password_hash, role, display_name,
-            is_active, failed_login_attempts, locked_until, last_login_at
+            is_active, failed_login_attempts, locked_until, last_login_at,
+            must_change_password
      FROM users
      WHERE id = $1 AND is_active = TRUE`,
     [userId]

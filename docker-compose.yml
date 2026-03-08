@@ -73,6 +73,22 @@ services:
     networks:
       - canopy-routes-net
 
+  # ──────────────────────────────────────────────────────────────
+  # Super-admin panel (React + Vite, served via nginx)
+  # ──────────────────────────────────────────────────────────────
+  canopy-routes-admin:
+    build:
+      context: ./admin
+      dockerfile: Dockerfile
+    container_name: canopy-routes-admin
+    ports:
+      - "3032:80"
+    depends_on:
+      - canopy-routes-api
+    restart: unless-stopped
+    networks:
+      - canopy-routes-net
+
 volumes:
   canopy-routes-db-data:
 

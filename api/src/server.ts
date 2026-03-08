@@ -29,6 +29,8 @@ import { aiRouter } from './routes/ai.router';
 import { snapshotsRouter } from './routes/snapshots.router';
 import { performanceActualsRouter } from './routes/performance-actuals.router';
 import { aiActionsRouter } from './routes/ai-actions.router';
+import { adminAuthRouter } from './routes/admin-auth.router';
+import { adminTenantsRouter } from './routes/admin-tenants.router';
 
 const logger = winston.createLogger({
   level: 'info',
@@ -52,7 +54,7 @@ app.use(helmet({
 const allowedOrigins = [
   'https://routes.sunsetapp.us',
   'https://routes-staging.sunsetapp.us',
-  ...(process.env.NODE_ENV !== 'production' ? ['http://localhost:5173', 'http://localhost:5174'] : []),
+  ...(process.env.NODE_ENV !== 'production' ? ['http://localhost:5173', 'http://localhost:5174', 'http://localhost:3032'] : []),
 ];
 
 app.use(cors({
@@ -98,6 +100,8 @@ app.use(aiRouter);
 app.use(snapshotsRouter);
 app.use(performanceActualsRouter);
 app.use('/v1/ai-actions', aiActionsRouter);
+app.use('/v1/auth/admin', adminAuthRouter);
+app.use('/v1/admin/tenants', adminTenantsRouter);
 
 const PORT = process.env.PORT || 3000;
 
