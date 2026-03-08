@@ -15,6 +15,20 @@ import { healthRouter } from './routes/health.routes';
 import { authRouter } from './routes/auth.routes';
 import { uploadRouter } from './routes/upload.routes';
 import { seasonsRouter } from './routes/seasons.routes';
+import { routesRouter } from './routes/routes.router';
+import { clientsRouter } from './routes/clients.router';
+import { toolsRouter } from './routes/tools.router';
+import { settingsRouter } from './routes/settings.router';
+import { exportRouter } from './routes/export.router';
+import { exportPdfRouter } from './routes/export-pdf.router';
+import { dashboardRouter } from './routes/dashboard.router';
+import { prospectPinsRouter } from './routes/prospect-pins.router';
+import { hardscapePinsRouter } from './routes/hardscape-pins.router';
+import { profitabilityRouter } from './routes/profitability.router';
+import { aiRouter } from './routes/ai.router';
+import { snapshotsRouter } from './routes/snapshots.router';
+import { performanceActualsRouter } from './routes/performance-actuals.router';
+import { aiActionsRouter } from './routes/ai-actions.router';
 
 const logger = winston.createLogger({
   level: 'info',
@@ -38,7 +52,7 @@ app.use(helmet({
 const allowedOrigins = [
   'https://routes.sunsetapp.us',
   'https://routes-staging.sunsetapp.us',
-  ...(process.env.NODE_ENV !== 'production' ? ['http://localhost:5173'] : []),
+  ...(process.env.NODE_ENV !== 'production' ? ['http://localhost:5173', 'http://localhost:5174'] : []),
 ];
 
 app.use(cors({
@@ -70,6 +84,20 @@ app.use(healthRouter);
 app.use(authRouter);
 app.use('/v1/clients', uploadRouter);
 app.use(seasonsRouter);
+app.use(routesRouter);
+app.use(clientsRouter);
+app.use(toolsRouter);
+app.use(settingsRouter);
+app.use(exportRouter);
+app.use('/v1/export/pdf', exportPdfRouter);
+app.use(dashboardRouter);
+app.use(prospectPinsRouter);
+app.use(hardscapePinsRouter);
+app.use(profitabilityRouter);
+app.use(aiRouter);
+app.use(snapshotsRouter);
+app.use(performanceActualsRouter);
+app.use('/v1/ai-actions', aiActionsRouter);
 
 const PORT = process.env.PORT || 3000;
 

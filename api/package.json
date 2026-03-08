@@ -12,12 +12,18 @@
     "test:csv": "node --require ts-node/register --test src/services/csv-parse.service.test.ts",
     "test:geo": "node --require ts-node/register --test src/services/geocoding.service.test.ts",
     "test:upload": "node --require ts-node/register --test src/tests/upload.integration.test.ts",
-    "test:all": "node --require ts-node/register --test src/services/zone.service.test.ts src/tests/auth.integration.test.ts src/services/csv-parse.service.test.ts src/services/geocoding.service.test.ts src/tests/upload.integration.test.ts",
+    "test:formulas": "node --require ts-node/register --test src/tests/formulas.test.ts",
+    "test:routes": "node --require ts-node/register --test src/tests/routes.integration.test.ts",
+    "test:tools": "node --require ts-node/register --test src/tests/tools.integration.test.ts",
+    "test:all": "node --require ts-node/register --test src/services/zone.service.test.ts src/tests/auth.integration.test.ts src/services/csv-parse.service.test.ts src/services/geocoding.service.test.ts src/tests/upload.integration.test.ts src/tests/formulas.test.ts src/tests/routes.integration.test.ts src/tests/tools.integration.test.ts",
     "test:watch": "node --require ts-node/register --test --watch src/services/zone.service.test.ts",
     "lint": "eslint src --ext .ts",
     "migrate": "node -e \"require('ts-node').register({transpileOnly:true,skipProject:true,compilerOptions:{module:'CommonJS',target:'ES2022',esModuleInterop:true}});require('../db/migrate.ts');\""
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.78.0",
+    "@types/archiver": "^7.0.0",
+    "archiver": "^7.0.1",
     "axios": "^1.13.6",
     "bcrypt": "^5.1.0",
     "cookie-parser": "^1.4.7",
@@ -30,6 +36,7 @@
     "multer": "^2.1.1",
     "papaparse": "^5.5.3",
     "pg": "^8.12.0",
+    "puppeteer-core": "^24.38.0",
     "winston": "^3.13.0",
     "zod": "^3.23.0"
   },

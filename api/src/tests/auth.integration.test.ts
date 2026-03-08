@@ -2,10 +2,19 @@
 // Integration tests for authentication endpoints (17 test cases)
 // Last modified: 2026-03-05
 
-import { describe, it } from 'node:test';
+import { describe, it, after } from 'node:test';
 import assert from 'node:assert/strict';
+import pg from 'pg';
 
 const BASE = 'http://localhost:3000';
+const cleanupPool = new pg.Pool({
+  connectionString: 'postgresql://canopy:canopy_dev@localhost:5433/canopy_routes',
+});
+
+after(async () => {
+  await cleanupPool.query('UPDATE users SET failed_login_attempts = 0, locked_until = NULL');
+  await cleanupPool.end();
+});
 
 interface ApiResponse {
   status: number;

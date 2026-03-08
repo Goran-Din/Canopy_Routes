@@ -111,6 +111,25 @@ export async function updateGeocodeStatus(
   );
 }
 
+export async function getClientsBySeason(
+  tenantId: string,
+  seasonId: string
+) {
+  const result = await pool.query(
+    `SELECT c.*,
+            rs.route_id AS assigned_route_id,
+            r.route_label AS assigned_route_label,
+            r.day_of_week AS assigned_route_day
+     FROM rpw_clients c
+     LEFT JOIN rpw_route_stops rs ON rs.client_id = c.id AND rs.deleted_at IS NULL
+     LEFT JOIN rpw_routes r ON r.id = rs.route_id AND r.season_id = $2
+     WHERE c.tenant_id = $1 AND c.deleted_at IS NULL
+     ORDER BY c.client_name ASC`,
+    [tenantId, seasonId]
+  );
+  return result.rows;
+}
+
 export async function getClientsByTenant(
   tenantId: string
 ): Promise<Array<{ id: string; clientName: string; geocodeStatus: string; addressLat: number | null; addressLng: number | null }>> {
